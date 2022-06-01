@@ -1,0 +1,49 @@
+# Exponential Sample with unknown mean
+set.seed(2016)
+lambda <- runif(1, 0.5, 1)
+lambda
+
+# Histogram of bootstrap sample mean of 'first sample'
+set.seed(1)
+sample <- rexp(50, lambda)
+bootstrap_sample <- Bootstrap_Implement(sample, 2000)
+
+CI_Exact <- Exp_Exact_CI(sample)
+CI_CLT <- Approx_CI_CLT(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T)
+
+print("------------Exact CI-----------")
+print(CI_Exact)
+print("----Approximate CI from CLT----")
+print(CI_CLT)
+print("-Approximate CI from Bootstrap-")
+print(CI_Boot)
+
+dev.off()
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_Exact[1, 1], CI_CLT[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_Exact[1, 2], CI_CLT[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Exact", "Approx_CLT", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean from exp(lambda)", 
+             n = 50)
+
+
+# Repeat for 1000 times
+CI_Exact <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_CLT <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_Boot <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+
+for(j in 1:1000) {
+  set.seed(j)
+  sample <- rexp(50, lambda)
+  CI_Exact <- rbind(CI_Exact, Exp_Exact_CI(sample))
+  CI_CLT <- rbind(CI_CLT, Approx_CI_CLT(sample))
+  CI_Boot <- rbind(CI_Boot, Bootstrap_Implement(sample, 2000, return_CI=T))
+  if(j %% 100 == 0) {
+    print(paste(j, "th iteration complete", sep=""))
+  }
+}
+
+print(Param_in_CI(1 / lambda, CI_Exact))
+print(Param_in_CI(1 / lambda, CI_CLT))
+print(Param_in_CI(1 / lambda, CI_Boot))

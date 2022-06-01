@@ -1,0 +1,182 @@
+source("Bootstrap.R")
+source("CIs.R")
+source("Utils.R")
+
+# Normal Sample with unknown variance
+# Set variance from unif(0.5, 1.5)
+set.seed(2016)
+pop_var <- runif(1, 0.5, 1.5)
+pop_var
+
+# Reset graph parameter
+dev.off()
+par(mfrow=c(2, 3))
+
+# Histogram of bootstrap sample mean of 'first sample' with n=10
+set.seed(1)
+sample <- rnorm(11, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 11)
+
+
+# Histogram of bootstrap sample mean of 'first sample' with n=20
+set.seed(2)
+sample <- rnorm(21, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 21)
+
+
+# Histogram of bootstrap sample mean of 'first sample' with n=50
+set.seed(3)
+sample <- rnorm(51, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 51)
+
+
+# Histogram of bootstrap sample mean of 'first sample' with n=100
+set.seed(4)
+sample <- rnorm(101, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 101)
+
+
+# Histogram of bootstrap sample mean of 'first sample' with n=200
+set.seed(5)
+sample <- rnorm(201, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 201)
+
+# Histogram of bootstrap sample mean of 'first sample' with n=200
+set.seed(6)
+sample <- rnorm(501, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 2000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median")
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = c(CI_LD[1, 1], CI_Boot[1, 1]), 
+             CI_max = c(CI_LD[1, 2], CI_Boot[1, 2]), 
+             CI_Names = c("Approx_LimitDist", "Approx_Bootstrap"), 
+             sample_name = "Bootstrap sample mean", 
+             n = 501)
+
+
+# Repeat for 1000 times
+for(j in c(11, 21, 51, 101, 201, 501)) {
+  CI <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+  
+  assign(paste("CI_LD_", j, sep=""), CI)
+  assign(paste("CI_Boot_", j, sep=""), CI)
+}
+
+
+for(j in 1:1000) {
+  # n = 11
+  set.seed(6 * j - 5)
+  sample <- rnorm(11, 0, sd = sqrt(pop_var))
+  CI_LD_11 <- rbind(CI_LD_11, Normal_Median_CI(sample))
+  CI_Boot_11 <- rbind(CI_Boot_11, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  
+  # n = 21
+  set.seed(6 * j - 4)
+  sample <- rnorm(21, 0, sd = sqrt(pop_var))
+  CI_LD_21 <- rbind(CI_LD_21, Normal_Median_CI(sample))
+  CI_Boot_21 <- rbind(CI_Boot_21, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  
+  # n = 51
+  set.seed(6 * j - 3)
+  sample <- rnorm(51, 0, sd = sqrt(pop_var))
+  CI_LD_51 <- rbind(CI_LD_51, Normal_Median_CI(sample))
+  CI_Boot_51 <- rbind(CI_Boot_51, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  
+  # n = 101
+  set.seed(6 * j - 2)
+  sample <- rnorm(101, 0, sd = sqrt(pop_var))
+  CI_LD_101 <- rbind(CI_LD_101, Normal_Median_CI(sample))
+  CI_Boot_101 <- rbind(CI_Boot_101, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  
+  # n = 201
+  set.seed(6 * j - 1)
+  sample <- rnorm(201, 0, sd = sqrt(pop_var))
+  CI_LD_201 <- rbind(CI_LD_201, Normal_Median_CI(sample))
+  CI_Boot_201 <- rbind(CI_Boot_201, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  
+  # n = 501
+  set.seed(6 * j)
+  sample <- rnorm(501, 0, sd = sqrt(pop_var))
+  CI_LD_501 <- rbind(CI_LD_501, Normal_Median_CI(sample))
+  CI_Boot_501 <- rbind(CI_Boot_501, Bootstrap_Implement(sample, 2000, return_CI=T, statistics="median"))
+  if(j %% 100 == 0) {
+    print(paste(j, "th iteration complete", sep=""))
+  }
+}
+
+print("--------n = 11--------")
+print(Param_in_CI(0, CI_LD_11))
+print(Param_in_CI(0, CI_Boot_11))
+
+print("--------n = 21--------")
+print(Param_in_CI(0, CI_LD_21))
+print(Param_in_CI(0, CI_Boot_21))
+
+print("--------n = 51--------")
+print(Param_in_CI(0, CI_LD_51))
+print(Param_in_CI(0, CI_Boot_51))
+
+print("--------n = 101--------")
+print(Param_in_CI(0, CI_LD_101))
+print(Param_in_CI(0, CI_Boot_101))
+
+print("--------n = 201--------")
+print(Param_in_CI(0, CI_LD_201))
+print(Param_in_CI(0, CI_Boot_201))
+
+print("--------n = 501--------")
+print(Param_in_CI(0, CI_LD_501))
+print(Param_in_CI(0, CI_Boot_501))

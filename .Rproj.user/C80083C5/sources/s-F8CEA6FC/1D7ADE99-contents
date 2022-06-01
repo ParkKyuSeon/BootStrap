@@ -1,0 +1,33 @@
+# Repeat getting bootstrap CI by same sample for 1000 times
+CI_Exact <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_Boot_100 <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_Boot_200 <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_Boot_500 <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+CI_Boot_1000 <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+
+set.seed(7)
+sample <- rnorm(50, 0, sd = sqrt(pop_var))
+
+for(j in 1:1000) {
+  CI_Exact <- rbind(CI_Exact, Normal_Exact_CI(sample))
+  CI_Boot_100 <- rbind(CI_Boot_100, Bootstrap_Implement(sample, 100, return_CI=T, seed_number_basenum = (j-1) * 1000))
+  CI_Boot_200 <- rbind(CI_Boot_200, Bootstrap_Implement(sample, 200, return_CI=T, seed_number_basenum = 1000000 + (j-1) * 1000))
+  CI_Boot_500 <- rbind(CI_Boot_500, Bootstrap_Implement(sample, 500, return_CI=T, seed_number_basenum = 2000000 + (j-1) * 1000))
+  CI_Boot_1000 <- rbind(CI_Boot_1000, Bootstrap_Implement(sample, 1000, return_CI=T, seed_number_basenum = 3000000 + (j-1) * 1000))
+  if(j %% 100 == 0) {
+    print(paste(j, "th iteration complete", sep=""))
+  }
+}
+
+print("---result with one samples---")
+print(Param_in_CI(0, CI_Exact))
+print(Param_in_CI(0, CI_Boot_100))
+print(Param_in_CI(0, CI_Boot_200))
+print(Param_in_CI(0, CI_Boot_500))
+print(Param_in_CI(0, CI_Boot_1000))
+
+min(CI_Boot_100[, 1]) ; max(CI_Boot_100[, 1])
+min(CI_Boot_100[, 2]) ; max(CI_Boot_100[, 2])
+
+min(CI_Boot_1000[, 1]) ; max(CI_Boot_1000[, 1])
+min(CI_Boot_1000[, 2]) ; max(CI_Boot_1000[, 2])

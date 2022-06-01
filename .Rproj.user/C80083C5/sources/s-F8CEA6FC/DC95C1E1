@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1654098395498.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3743633306",
+    "id" : "DC95C1E1",
+    "lastKnownWriteTime" : 1654098261,
+    "last_content_update" : 1654098261,
+    "path" : "~/Documents/2022_1/BootStrap/Simultation/Normal_Median_DiffN_2.R",
+    "project_path" : "Simultation/Normal_Median_DiffN_2.R",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

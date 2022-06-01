@@ -1,0 +1,55 @@
+# Normal Sample with unknown variance
+# Set variance from unif(0.5, 1.5)
+set.seed(2016)
+pop_var <- runif(1, 0.5, 1.5)
+pop_var
+
+dev.off()
+par(mfrow=c(1, 2))
+
+# Histogram of bootstrap sample mean of 'first sample'
+# B=1000 with 'enough' n=51
+set.seed(2)
+sample <- rnorm(51, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 1000)
+
+CI_Exact <- Normal_Exact_CI(sample)
+CI_Boot <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+for(i in 1:5) {
+  CI_Boot <- rbind(CI_Boot, Bootstrap_Implement(sample, 1000, return_CI=T, seed_number_basenum=(i - 1) * 1000))
+}
+CIs <- rbind(CI_Exact, CI_Boot)
+rownames(CIs) <- c("Exact", "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5")
+print(CIs)
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = CIs[, 1], 
+             CI_max = CIs[, 2], 
+             CI_Names = c("Exact", 
+                          "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5"), 
+             sample_name = "Bootstrap sample mean from N(0, simga^2)", 
+             n = 51)
+
+
+# Histogram of bootstrap sample median of 'first sample'
+# B=1000 with 'enough' n=51
+set.seed(2)
+sample <- rnorm(51, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 1000, statistics="median")
+
+CI_LD <- Normal_Median_CI(sample)
+CI_Boot <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+for(i in 1:5) {
+  CI_Boot <- rbind(CI_Boot, Bootstrap_Implement(sample, 1000, return_CI=T, seed_number_basenum=(i - 1) * 1000, statistics="median"))
+}
+CIs <- rbind(CI_LD, CI_Boot)
+rownames(CIs) <- c("Approx_LimitDist", "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5")
+print(CIs)
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = CIs[, 1], 
+             CI_max = CIs[, 2], 
+             CI_Names = c("Approx_LimitDist", 
+                          "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5"), 
+             sample_name = "Bootstrap sample mean from N(0, simga^2)", 
+             n = 51)

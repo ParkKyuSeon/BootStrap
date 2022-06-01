@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1654098274145.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1572091707",
+    "id" : "372FB599",
+    "lastKnownWriteTime" : 1654098285,
+    "last_content_update" : 1654098285150,
+    "path" : "~/Documents/2022_1/BootStrap/Simultation/NormalWithUnknownVar_N50.R",
+    "project_path" : "Simultation/NormalWithUnknownVar_N50.R",
+    "properties" : {
+        "cursorPosition" : "2,17",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

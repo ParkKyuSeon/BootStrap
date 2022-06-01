@@ -1,0 +1,33 @@
+# Normal Sample with unknown variance
+# Set variance from unif(0.5, 1.5)
+set.seed(2016)
+pop_var <- runif(1, 0.5, 1.5)
+pop_var
+
+dev.off()
+
+# Histogram of bootstrap sample mean of 'first sample'
+# B=100 with 'enough' n=50
+set.seed(5001)
+sample <- rnorm(50, 0, sd = sqrt(pop_var))
+bootstrap_sample <- Bootstrap_Implement(sample, 100)
+
+CI_Exact <- Normal_Exact_CI(sample)
+CI_CLT <- Approx_CI_CLT(sample)
+CI_Boot <- data.frame(min_CI = NA, max_CI = NA) [-1, ]
+for(i in 1:5) {
+  CI_Boot <- rbind(CI_Boot, Bootstrap_Implement(sample, 100, return_CI=T, seed_number_basenum=(i - 1) * 1000))
+}
+CIs <- rbind(CI_Exact, CI_CLT, CI_Boot)
+rownames(CIs) <- c("Exact", "Approx_CLT", 
+                   "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5")
+print(CIs)
+
+Hist_With_CI(bootstrap_sample, 
+             CI_min = CIs[-2, 1], 
+             CI_max = CIs[-2, 2], 
+             CI_Names = c("Exact", 
+                          "Approx_Boot_1", "Approx_Boot_2", "Approx_Boot_3", "Approx_Boot_4", "Approx_Boot_5"), 
+             sample_name = "Bootstrap sample mean from N(0, simga^2)", 
+             n = 50)
+
